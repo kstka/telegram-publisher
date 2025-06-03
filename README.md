@@ -81,7 +81,7 @@ The `state.json` file tracks what was posted, when, and to which groups. It's au
 
 ```json
 {
-  "@yourgroup": {
+  "yourgroup": {
     "last_group_post": 1717000000,
     "items": {
       "item1": {
