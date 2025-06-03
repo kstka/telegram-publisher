@@ -97,8 +97,8 @@ The `state.json` file tracks what was posted, when, and to which groups. It's au
 }
 ```
 
-* last_group_post: Unix timestamp of the last post in this group.
-* items: Maps item folders to their last posting time and the Telegram message_ids sent as an album (used for cleanup before reposting).
+* `last_group_post`: Unix timestamp of the last post in this group.
+* `items`: Maps item folders to their last posting time and the Telegram message_ids sent as an album (used for cleanup before reposting).
 
 ---
 
