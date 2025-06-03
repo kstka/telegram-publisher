@@ -75,6 +75,33 @@ Logs are written to `logs/publisher.log`, rotated weekly. You can check the log 
 
 ---
 
+## 🗂 state.json Structure
+
+The `state.json` file tracks what was posted, when, and to which groups. It's automatically managed by the script.
+
+```json
+{
+  "@yourgroup": {
+    "last_group_post": 1717000000,
+    "items": {
+      "item1": {
+        "last_post_time": 1716900000,
+        "last_post_ids": [12345, 12346, 12347]
+      },
+      "item2": {
+        "last_post_time": 1716800000,
+        "last_post_ids": [12300]
+      }
+    }
+  }
+}
+```
+
+* last_group_post: Unix timestamp of the last post in this group.
+* items: Maps item folders to their last posting time and the Telegram message_ids sent as an album (used for cleanup before reposting).
+
+---
+
 ## ☁️ Optional: Sentry Integration
 
 If enabled in `config.py`, errors are reported to your [Sentry](https://sentry.io) project.
