@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 Copy the config template and fill in your credentials:
 
-```bash
+```
 cp config.sample.py config.py
 ```
 
