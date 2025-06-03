@@ -1,4 +1,3 @@
-````markdown
 # Telegram Publisher Bot
 
 A simple script for periodically publishing photo albums with descriptions to Telegram groups (e.g. for classified ads, marketplaces, etc.).
