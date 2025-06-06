@@ -11,7 +11,8 @@ SESSIONS_DIR = 'sessions'
 STATE_FILE = 'state.json'
 DEFAULT_POST_DELAY_DAYS = 7
 
-logger.add("logs/publisher.log", encoding="utf8", rotation="1 week", retention="4 weeks")
+logger.add("logs/main.log", encoding="utf8", rotation="1 week", retention="4 weeks")
+logger.add("logs/debug.log", level='DEBUG', encoding="utf8", rotation="1 week", retention="4 weeks")
 
 def use_sentry():
     try:
@@ -111,7 +112,7 @@ def main():
             logger.debug(f"Checking group {group_name}, last post was {now - last_group_post} sec ago")
 
             if now - last_group_post < group_delay:
-                logger.info(f"[SKIP] Group {group_name}: delay not reached yet.")
+                logger.debug(f"[SKIP] Group {group_name}: delay not reached yet.")
                 continue
 
             candidates = []
@@ -129,7 +130,7 @@ def main():
                     logger.debug(f"[SKIP] Item '{item_name}' not ready (cooldown: {cooldown}s)")
 
             if not candidates:
-                logger.info(f"[SKIP] No suitable items found for group {group_name}")
+                logger.debug(f"[SKIP] No suitable items found for group {group_name}")
                 continue
 
             candidates.sort(reverse=True)
@@ -146,7 +147,7 @@ def main():
                 state[group_name] = group_state
 
     save_state(state)
-    logger.info("Script execution completed.")
+    logger.debug("Script execution completed.")
 
 if __name__ == '__main__':
     main()

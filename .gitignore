@@ -133,3 +133,4 @@ logs/*
 sessions/*
 items/*
 state.json
+items_archive

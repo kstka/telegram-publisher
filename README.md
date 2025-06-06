@@ -45,10 +45,10 @@ items/
 
 ## 🕒 Cron Job
 
-The script is designed to be run regularly (e.g. every 15 minutes) via `cron`:
+The script is designed to be run every hour via `cron`:
 
 ```bash
-*/15 * * * * /usr/bin/python3 /path/to/main.py
+* * * * * sleep $((RANDOM % 300)); /usr/bin/python3 /path/to/main.py
 ```
 
 * It will publish **one item per group per run**, only if both:
@@ -66,12 +66,6 @@ Publication history is stored in `state.json` (automatically managed). It tracks
 
 * When each item was last posted to each group
 * Message IDs to delete previous albums
-
----
-
-## 🛠 Logging
-
-Logs are written to `logs/publisher.log`, rotated weekly. You can check the log to see what was posted or skipped.
 
 ---
 
@@ -99,6 +93,12 @@ The `state.json` file tracks what was posted, when, and to which groups. It's au
 
 * `last_group_post`: Unix timestamp of the last post in this group.
 * `items`: Maps item folders to their last posting time and the Telegram message_ids sent as an album (used for cleanup before reposting).
+
+---
+
+## 🛠 Logging
+
+Logs are written to `logs/main.log` and `logs/debug.log`, rotated weekly. You can check the log to see what was posted.
 
 ---
 
