@@ -41,6 +41,8 @@ items/
 * You can include multiple `.jpg`, `.jpeg`, or `.png` images — they will be sent as an album.
 * `delay.txt` should contain a number like `1`, `0.5`, or `7`. If missing, defaults to 7 days.
 
+When the folder is deleted, the bot will automatically clean up its last posted message(s) in all groups.
+
 ---
 
 ## 🕒 Cron Job
