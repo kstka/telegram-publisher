@@ -95,6 +95,7 @@ def main():
 
     now = int(time.time())
     state = load_state()
+    original_state_json = json.dumps(state, sort_keys=True)
 
     with TelegramClient(
         os.path.join(SESSIONS_DIR, config.TELEGRAM_SESSION_NAME),
@@ -169,7 +170,13 @@ def main():
             for item_name in to_remove:
                 del group_state["items"][item_name]
 
-    save_state(state)
+    updated_state_json = json.dumps(state, sort_keys=True)
+    if updated_state_json != original_state_json:
+        save_state(state)
+        logger.debug("State has changed — file updated.")
+    else:
+        logger.debug("State unchanged — skipping save.")
+
     logger.debug("Script execution completed.")
 
 if __name__ == '__main__':
