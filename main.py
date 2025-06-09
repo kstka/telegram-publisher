@@ -146,6 +146,29 @@ def main():
                 group_state['last_group_post'] = now
                 state[group_name] = group_state
 
+        # Cleanup: remove state entries for deleted items
+        existing_items = set(os.listdir(ITEMS_DIR))
+
+        for group_name, group_state in state.items():
+            items_state = group_state.get("items", {})
+            to_remove = []
+
+            for item_name, item_data in items_state.items():
+                if item_name not in existing_items:
+                    logger.info(f"[CLEANUP] '{item_name}' no longer exists in {ITEMS_DIR}, removing from state")
+                    old_post_ids = item_data.get("last_post_ids")
+                    if old_post_ids:
+                        try:
+                            client(ChannelDeleteMessagesRequest(group_name, old_post_ids))
+                            logger.success(f"[CLEANUP] Deleted old messages for '{item_name}' in {group_name}")
+                        except Exception as e:
+                            logger.error(f"[CLEANUP] Failed to delete messages for '{item_name}': {e}")
+                    to_remove.append(item_name)
+
+            # Apply deletions
+            for item_name in to_remove:
+                del group_state["items"][item_name]
+
     save_state(state)
     logger.debug("Script execution completed.")
 
