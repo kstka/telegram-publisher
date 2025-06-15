@@ -11,7 +11,7 @@ SESSIONS_DIR = 'sessions'
 STATE_FILE = 'state.json'
 DEFAULT_POST_DELAY_DAYS = 7
 
-logger.add("logs/main.log", encoding="utf8", rotation="1 week", retention="4 weeks")
+logger.add("logs/main.log", level="INFO", encoding="utf8", rotation="1 week", retention="4 weeks")
 logger.add("logs/debug.log", level='DEBUG', encoding="utf8", rotation="1 week", retention="4 weeks")
 
 def use_sentry():
