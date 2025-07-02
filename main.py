@@ -5,6 +5,7 @@ from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import DeleteMessagesRequest as ChannelDeleteMessagesRequest
 from loguru import logger
 import config
+from config import blocked_groups
 
 ITEMS_DIR = 'items'
 SESSIONS_DIR = 'sessions'
@@ -70,6 +71,11 @@ def post_item(client, group, item_path, old_post_ids):
         logger.warning(f"[SKIP] No photos found in {item_path}.")
         return None
 
+    # Check if the group is blocked due to a previous error
+    if group in blocked_groups:
+        logger.warning(f"[SKIP] Group {group} blocked because of previous error.")
+        return None
+
     # delete old album messages
     if old_post_ids:
         try:
@@ -88,6 +94,10 @@ def post_item(client, group, item_path, old_post_ids):
             return [msg.id for msg in result]
     except Exception as e:
         logger.error(f"Failed to send post to {group} from {item_path}: {e}")
+        # Block the group if the error indicates we can't write in the chat
+        if "can't write in this chat" in str(e).lower():
+            blocked_groups.add(group)
+            logger.warning(f"[BLOCK] Group {group} blocked due to error: {e}")
         return None
 
 def main():
@@ -108,6 +118,10 @@ def main():
         lang_code=config.LANG_CODE
     ) as client:
         for group_name, group_delay in get_groups_and_delays():
+            if group_name in blocked_groups:
+                logger.warning(f"[SKIP] Group {group_name} blocked, skipping.")
+                continue
+
             group_state = state.get(group_name, {})
             last_group_post = group_state.get('last_group_post', 0)
             logger.debug(f"Checking group {group_name}, last post was {now - last_group_post} sec ago")

@@ -16,6 +16,9 @@ APP_VERSION = "4.12.2 x64"
 LANG_CODE = "en"
 SYSTEM_LANG_CODE = "en-US"
 
+# Set of blocked groups
+blocked_groups = set()
+
 # --- Group delay settings (in days) ---
 # Use group usernames (e.g., '@mygroup') or numeric IDs (e.g., -1001234567890)
 GROUPS = {

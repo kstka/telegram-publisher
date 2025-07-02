@@ -104,6 +104,22 @@ Logs are written to `logs/main.log` and `logs/debug.log`, rotated weekly. You ca
 
 ---
 
+## ⚠️ Group Posting Restrictions
+
+Sometimes a group may block the ability to post (for example, due to group rules violations or admin restrictions).  
+If this happens, you will see errors like:
+
+```
+You can't write in this chat (caused by UploadMediaRequest)
+```
+
+When such an error occurs, the group name is automatically added to the `blocked_groups` variable (see `config.py`).  
+No further attempts to post will be made to this group until the script is restarted or the group is unblocked.
+
+You can also manually add group names to `blocked_groups` in `config.py` to temporarily disable posting to them and wait for the restriction to be lifted.
+
+---
+
 ## ☁️ Optional: Sentry Integration
 
 If enabled in `config.py`, errors are reported to your [Sentry](https://sentry.io) project.
