@@ -50,7 +50,7 @@ When the folder is deleted, the bot will automatically clean up its last posted 
 The script is designed to be run every hour via `cron`:
 
 ```bash
-* * * * * sleep $((RANDOM % 300)); cd /home/user/telegram-publisher; python main.py
+0 * * * * sleep $((RANDOM % 300)); cd /home/user/telegram-publisher; python main.py
 ```
 
 * It will publish **one item per group per run**, only if both:
