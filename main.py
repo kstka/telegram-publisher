@@ -96,7 +96,7 @@ def post_item(client, group, item_path, old_post_ids):
         logger.error(f"Failed to send post to {group} from {item_path}: {e}")
         # Block the group if the error indicates we can't write in the chat
         if "can't write in this chat" in str(e).lower():
-            blocked_groups.add(group)
+            blocked_groups.append(group)
             logger.warning(f"[BLOCK] Group {group} blocked due to error: {e}")
         return None
 
