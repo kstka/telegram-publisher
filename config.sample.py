@@ -19,11 +19,11 @@ SYSTEM_LANG_CODE = "en-US"
 # List of blocked groups
 blocked_groups = []
 
-# --- Group delay settings (in days) ---
+# --- Group delay, message retention, and weekly post limit settings ---
 # Use group usernames (e.g., '@mygroup') or numeric IDs (e.g., -1001234567890)
 GROUPS = {
-    'examplegroup1': 0.5,   # 12 hours
-    'examplegroup2': 1,     # 1 day
+    'examplegroup1': {'delay': 0.5, 'keep_old': False, 'max_per_week': 5},  # 12 hours, old messages will be deleted, max 5 posts per week
+    'examplegroup2': {'delay': 1, 'keep_old': True, 'max_per_week': 10},    # 1 day, old messages will be kept, max 10 posts per week
 }
 
 # --- Optional: Sentry error reporting ---

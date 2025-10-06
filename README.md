@@ -58,7 +58,7 @@ The script is designed to be run every hour via `cron`:
   * the group delay has passed, and
   * the item's cooldown has passed.
 
-Old posts are deleted before new ones are published.
+Old posts are deleted before new ones are published if needed.
 
 ---
 
@@ -82,15 +82,14 @@ The `state.json` file tracks what was posted, when, and to which groups. It's au
     "items": {
       "item1": {
         "last_post_time": 1716900000,
-        "last_post_ids": [12345, 12346, 12347]
+        "post_ids": [12345, 12346, 12347]
       },
       "item2": {
         "last_post_time": 1716800000,
-        "last_post_ids": [12300]
+        "post_ids": [12300]
       }
     }
   }
-}
 ```
 
 * `last_group_post`: Unix timestamp of the last post in this group.
