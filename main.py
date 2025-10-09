@@ -183,7 +183,7 @@ def main():
             candidates = []
             for item_name in os.listdir(ITEMS_DIR):
                 if item_name in excludes.get(group_name, set()):
-                    logger.debug(f"[SKIP] Item '{item_name}' excluded for group {group_name} by config")
+                    logger.info(f"[SKIP] Item '{item_name}' excluded for group {group_name} by config")
                     continue
 
                 item_path = os.path.join(ITEMS_DIR, item_name)
