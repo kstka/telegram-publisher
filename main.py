@@ -118,6 +118,19 @@ def post_item(client, group, item_path):
             logger.warning(f"[BLOCK] Group {group} blocked due to error: {e}")
         return None
 
+def get_excludes():
+    raw = getattr(config, 'EXCLUDES', {}) or {}
+    excludes = {}
+    if isinstance(raw, dict):
+        for g, items in raw.items():
+            if isinstance(items, (list, tuple, set)):
+                excludes[g] = set(items)
+            elif items is None:
+                excludes[g] = set()
+            else:
+                excludes[g] = {str(items)}
+    return excludes
+
 def main():
     use_sentry()
 
@@ -135,6 +148,8 @@ def main():
         system_lang_code=config.SYSTEM_LANG_CODE,
         lang_code=config.LANG_CODE
     ) as client:
+        excludes = get_excludes()
+
         for group_name, group_delay, keep_old, max_per_week in get_groups_settings():
 
             # skip blocked groups
@@ -167,6 +182,10 @@ def main():
             # find candidate items
             candidates = []
             for item_name in os.listdir(ITEMS_DIR):
+                if item_name in excludes.get(group_name, set()):
+                    logger.debug(f"[SKIP] Item '{item_name}' excluded for group {group_name} by config")
+                    continue
+
                 item_path = os.path.join(ITEMS_DIR, item_name)
                 if not os.path.isdir(item_path):
                     continue

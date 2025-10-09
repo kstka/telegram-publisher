@@ -26,6 +26,13 @@ GROUPS = {
     'examplegroup2': {'delay': 1, 'keep_old': True, 'max_per_week': 10},    # 1 day, old messages will be kept, max 10 posts per week
 }
 
+# --- Excludes items from being reposted in specific groups ---
+EXCLUDES = {
+    "group_username_1": ["item1", "item2"],
+    "group_username_2": ("old_item",),
+    "group_username_3": None,  # empty exclusions
+}
+
 # --- Optional: Sentry error reporting ---
 USE_SENTRY = False
 SENTRY_DNS = 'https://examplePublicKey@o0.ingest.sentry.io/0'

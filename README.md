@@ -119,6 +119,23 @@ You can also manually add group names to `blocked_groups` in `config.py` to temp
 
 ---
 
+## ❌ Exclusions (EXCLUDES)
+
+- `EXCLUDES` is expected to be a dictionary mapping group name -> list/tuple/set of item folder names to skip.
+- `get_excludes()` reads `config.EXCLUDES` and returns a `dict` where each key is a group name and the value is a `set` of item names.
+- When selecting candidates for posting, items listed in `EXCLUDES` for the given group are skipped and a `[SKIP] Item '...' excluded for group ...` log entry is written.
+
+Example `config.py`:
+
+```python
+EXCLUDES = {
+    "group_username_1": ["item1", "item2"],
+    "group_username_2": ("old_item",),
+    "group_username_3": None,  # empty exclusions
+}
+
+---
+
 ## ☁️ Optional: Sentry Integration
 
 If enabled in `config.py`, errors are reported to your [Sentry](https://sentry.io) project.
