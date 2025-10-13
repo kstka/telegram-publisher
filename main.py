@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import time
 from telethon.sync import TelegramClient
@@ -128,6 +129,10 @@ def post_item(client, group, item_path):
         if "can't write in this chat" in str(e).lower():
             blocked_groups.append(group)
             logger.warning(f"[BLOCK] Group {group} blocked due to error: {e}")
+        # Handle rate limit errors gracefully
+        if "seconds is required before sending another message" in str(e).lower():
+            logger.warning(f"[RATE LIMIT] Hit rate limit when posting to {group}.")
+            return []  # Most probably post was sent, return list to add item post time
         return None
 
 def get_excludes():
@@ -224,7 +229,7 @@ def main():
 
             # post new item
             new_post_ids = post_item(client, group_name, item_path)
-            if new_post_ids:
+            if new_post_ids is not None:
                 logger.success(f"[OK] Published '{item_name}' to {group_name}, msg_ids={new_post_ids}")
 
                 item_entry = group_state.setdefault('items', {}). \
@@ -235,6 +240,9 @@ def main():
 
                 group_state['last_group_post'] = now
                 state[group_name] = group_state
+
+            # respect Telegram rate limits
+            time.sleep(5)
 
             # cleanup old posts if needed
             deleted_post_ids = cleanup_item(client, group_name, old_post_ids, keep_old)
