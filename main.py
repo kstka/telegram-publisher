@@ -46,6 +46,18 @@ def get_item_post_delay(item_path, default_delay=DEFAULT_POST_DELAY_DAYS):
     logger.debug(f"No delay.txt found for '{item_path}', using default: {default_delay} days")
     return default_delay * SECONDS_IN_DAY
 
+def get_item_priority(item_path):
+    priority_path = os.path.join(item_path, 'priority.txt')
+    if os.path.exists(priority_path):
+        try:
+            with open(priority_path) as f:
+                priority = float(f.read().strip())
+                logger.debug(f"Found priority.txt for '{item_path}': {priority}")
+                return priority
+        except Exception as e:
+            logger.warning(f"Failed to read priority.txt in {item_path}: {e}")
+    return 1.0
+
 def get_description_and_photos(item_path):
     description_path = os.path.join(item_path, 'description.txt')
     photos = sorted(
@@ -192,12 +204,13 @@ def main():
                 if not os.path.isdir(item_path):
                     continue
                 cooldown = get_item_post_delay(item_path)
+                priority = get_item_priority(item_path)
                 item_state = group_state.get('items', {}).get(item_name, {})
                 last_post_time = item_state.get('last_post_time', 0)
                 current_cooldown = now - last_post_time
                 if current_cooldown >= cooldown:
                     logger.debug(f"Item '{item_name}' is ready for posting to {group_name}")
-                    candidates.append((current_cooldown, item_name, item_path, item_state.get('post_ids')))
+                    candidates.append((current_cooldown * priority, item_name, item_path, item_state.get('post_ids')))
                 else:
                     logger.debug(f"[SKIP] Item '{item_name}' not ready (cooldown: {cooldown}s)")
 

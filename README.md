@@ -45,6 +45,17 @@ When the folder is deleted, the bot will automatically clean up its last posted 
 
 ---
 
+## ⚡ Priority Function
+
+A priority mechanism controls which items are preferred for publishing when multiple candidates are available for a group.
+
+- Per-item priority:
+  - Each item folder may contain a `priority.txt` file with a numeric value (integer or float).
+  - Higher numbers mean higher priority. Default priority is `1` when the file is missing or invalid.
+  - Example: `priority.txt` containing `2` makes this item more likely to be chosen before items with lower priorities.
+
+---
+
 ## 🕒 Cron Job
 
 The script is designed to be run every hour via `cron`:
