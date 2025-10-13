@@ -182,6 +182,8 @@ def main():
             # find candidate items
             candidates = []
             for item_name in os.listdir(ITEMS_DIR):
+
+                # skip excluded items
                 if item_name in excludes.get(group_name, set()):
                     logger.info(f"[SKIP] Item '{item_name}' excluded for group {group_name} by config")
                     continue
@@ -192,9 +194,10 @@ def main():
                 cooldown = get_item_post_delay(item_path)
                 item_state = group_state.get('items', {}).get(item_name, {})
                 last_post_time = item_state.get('last_post_time', 0)
-                if now - last_post_time >= cooldown:
+                current_cooldown = now - last_post_time
+                if current_cooldown >= cooldown:
                     logger.debug(f"Item '{item_name}' is ready for posting to {group_name}")
-                    candidates.append((cooldown, item_name, item_path, item_state.get('post_ids')))
+                    candidates.append((current_cooldown, item_name, item_path, item_state.get('post_ids')))
                 else:
                     logger.debug(f"[SKIP] Item '{item_name}' not ready (cooldown: {cooldown}s)")
 
